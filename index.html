@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard InvestCuan</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00ffcc;
+      box-shadow: 0 0 10px #00ffcc44;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .dashboard-card {
+      background: #1a1a1a;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px #00ffcc55;
+      margin-bottom: 1.5rem;
+    }
+
+    .balance {
+      font-size: 2rem;
+      color: #00ffcc;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #000000;
+      background: linear-gradient(to right, #00ccff, #00ffcc);
+      box-shadow: 0 0 10px #00ffcc88;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+
+    .button-group button:hover {
+      background: linear-gradient(to right, #00ffcc, #00ccff);
+      transform: scale(1.03);
+    }
+
+    canvas {
+      width: 100%;
+      height: 300px;
+      background: #121212;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    
+    .nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.brand {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #00ffcc;
+}
+
+.burger {
+  font-size: 1.8rem;
+  cursor: pointer;
+  display: none;
+  color: #00ffcc;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #00ffcc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.tentang {
+  background: #1a1a1a;
+  padding: 2rem 1rem;
+  margin: 2rem auto;
+  margin-top: 30px; /* Menambah jarak dari header */
+  box-shadow: 0 0 10px #00ffcc44;
+  border-radius: 10px;
+  max-width: 800px;
+}
+
+.tentang h2 {
+  color: #00ffcc;
+  margin-bottom: 1rem;
+}
+
+.tentang p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    background: #1f1f1f;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    padding: 1rem;
+    box-shadow: 0 0 10px #00ffcc55;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+    .investment-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .investment-box {
+      flex: 1 1 calc(50% - 1rem);
+      background: #222;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #00ffcc33;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .investment-box h3 {
+      margin: 0 0 0.5rem;
+      color: #00ffcc;
+    }
+
+    .investment-box p {
+      margin: 0.25rem 0;
+    }
+
+    .investment-box button {
+      margin-top: auto;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(to right, #00ccff, #00ffcc);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ffcc88;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+
+    .investment-box button:hover {
+      background: linear-gradient(to right, #00ffcc, #00ccff);
+      transform: scale(1.05);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 10px #00ffcc55;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 1rem;
+      color: #00ffcc;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .modal-content button {
+      width: 48%;
+      padding: 0.7rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      margin: 0.25rem;
+      background: linear-gradient(to right, #00ccff, #00ffcc);
+      cursor: pointer;
+      font-weight: bold;
+      color: black;
+      box-shadow: 0 0 8px #00ffcc88;
+    }
+
+    .modal-content button:hover {
+      background: linear-gradient(to right, #00ccff, #00ccff);
+    }
+    
+    /* Animasi spinner (loading) */
+      .loader {
+     border: 8px solid #f3f3f3; /* Light grey background */
+     border-top: 8px solid #3498db; /* Blue color for spinner */
+     border-radius: 50%;
+     width: 50px;
+     height: 50px;
+     animation: spin 1s linear infinite; /* Spin animation */
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 50px auto;
+    }
+
+      /* Spin animation */
+      @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Modal sukses */
+    #suksesModal {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+   }
+
+     @keyframes fadeIn {
+     0% { opacity: 0; }
+     100% { opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.9); }
+    }
+
+    .modal.show .modal-content {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .modal.hide .modal-content {
+      animation: fadeOut 0.2s ease-in forwards;
+    }
+
+    @media (max-width: 600px) {
+    }
+    
+      @keyframes spin {
+      0% { transform: rotate(0deg); }
+     100% { transform: rotate(360deg); }
+    }
+
+      .investment-box {
+        flex: 1 1 100%;
+      }
+
+      canvas {
+        height: 200px;
+      }
+      
+      footer {
+      background: #1f1f1f;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      color: white;
+      box-shadow: 0 0 10px #00ffcc44;
+    }
+   }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="brand">InvestCuan</div>
+      <div class="burger" onclick="toggleMenu()">&#9776;</div>
+      <nav id="navbar">
+        <a href="#">Dashboard</a>
+        <a href="#">Tentang</a>
+        <a href="https://t.me/peyyx">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard-card">
+      <div>Saldo Anda:</div>
+      <div class="balance" id="saldo">Rp 0</div>
+   <div class="button-group">
+  <button onclick="window.location.href='payment.html';"><strong>Top Up</strong></button>
+  <button onclick="showModal('topup')"><strong>Konfirmasi</strong></button>   
+   <button onclick="window.location.href='withdraw.html'"><strong>Withdraw</strong></button>
+ </div>
+</div>
+    <div class="dashboard-card">
+      <h2>Grafik Investasi</h2>
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="dashboard-card">
+      <h2>Pilihan Investasi</h2>
+      <div class="investment-list">
+        <div class="investment-box">
+          <h3>Saham Cuan</h3>
+          <p>Harga: Rp 100.000</p>
+          <p>Deskripsi: Investasi di perusahaan besar dengan potensi profit 15%/bulan.</p>
+          <button onclick="beli('Saham Cuan', 100000)">Beli</button>
+        </div>
+        <div class="investment-box">
+          <h3>Emas Cuan</h3>
+          <p>Harga: Rp 150.000</p>
+          <p>Deskripsi: Investasi emas dengan pertumbuhan stabil 10%/bulan.</p>
+          <button onclick="beli('Emas Cuan', 150000)">Beli</button>
+        </div>
+        <div class="investment-box">
+          <h3>Kripto Cuan</h3>
+          <p>Harga: Rp 200.000</p>
+          <p>Deskripsi: Investasi aset digital dengan potensi keuntungan tinggi, risiko tinggi.</p>
+          <button onclick="beli('Kripto Cuan', 200000)">Beli</button>
+        </div>
+        <div class="investment-box">
+          <h3>Properti Mini Cuan</h3>
+          <p>Harga: Rp 500.000</p>
+          <p>Deskripsi: Investasi properti kecil dengan pendapatan pasif 8%/bulan.</p>
+          <button onclick="beli('Properti Mini Cuan', 500000)">Beli</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Topup/Withdraw -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="modal-title">Top Up</h2>
+      <input type="number" id="modal-input" placeholder="Masukkan nominal" />
+      <div>
+        <button onclick="prosesModal()">OK</button>
+        <button onclick="closeModal()">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Notifikasi -->
+  <div class="modal" id="notifikasiModal">
+    <div class="modal-content">
+      <h2>Gagal</h2>
+      <p id="notifikasiPesan">Saldo tidak cukup.</p>
+      <button onclick="closeNotifikasi()">Tutup</button>
+    </div>
+  </div>
+  
+     <!-- Modal Loading -->
+     <div class="modal" id="loadingModal">
+  <div class="modal-content">
+    <h2>Loading...</h2>
+    <div class="loader"></div> <!-- Animasi spinner -->
+  </div>
+</div>
+
+    <!-- Modal Loading -->
+    <div class="modal" id="loadingModal">
+  <div class="modal-content">
+    <div class="loader"></div> <!-- Animasi spinner -->
+  </div>
+</div>
+
+    <!-- Modal Sukses -->
+     <div class="modal" id="suksesModal">
+  <div class="modal-content">
+    <h2>Berhasil Membeli Saham</h2>
+    <p id="notifikasiPesan">Membeli artinya mengerti tentang investasi. Salam sukses selalu</p>
+    <button onclick="closeSuksesModal()">Tutup</button>
+  </div>
+</div>
+
+  <!-- Tentang Website -->
+  <section class="tentang">
+    <div class="container">
+      <h2>Tentang InvestCuan</h2>
+      <p>InvestCuan adalah platform investasi digital yang dirancang untuk membantu pengguna mengelola dan mengembangkan dana mereka secara aman, cepat, dan transparan. Kami menyediakan berbagai pilihan produk investasi seperti saham, emas, kripto, dan properti yang dapat disesuaikan dengan profil risiko dan tujuan keuangan Anda.</p>
+      <p>Kami berkomitmen pada keamanan, kemudahan penggunaan, dan hasil yang optimal. Dengan tampilan modern dan fitur interaktif, InvestCuan menjadi mitra terpercaya bagi para investor pemula hingga profesional.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 InvestCuan. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let saldo = parseInt(localStorage.getItem('saldo')) || 0;
+  const saldoEl = document.getElementById('saldo');
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalInput = document.getElementById('modal-input');
+  const loadingModal = document.getElementById('loadingModal');
+  const notifikasiModal = document.getElementById('notifikasiModal');
+  const suksesModal = document.getElementById('suksesModal');
+  const notifikasiPesan = document.getElementById('notifikasiPesan');
+
+  const investments = JSON.parse(localStorage.getItem('investments')) || [];
+  const chartCanvas = document.getElementById('chart');
+  const ctx = chartCanvas.getContext('2d');
+
+  function updateSaldo() {
+    saldoEl.textContent = `Rp ${saldo.toLocaleString()}`;
+    localStorage.setItem('saldo', saldo);
+  }
+
+  function showModal(type) {
+    modal.style.display = 'flex';
+    modalTitle.textContent = type === 'topup' ? 'Top Up' : 'Withdraw';
+    modalInput.value = '';
+    modal.dataset.action = type;
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+
+  function prosesModal() {
+    const nominal = parseInt(modalInput.value);
+    if (!nominal || nominal <= 0) return;
+
+    if (modal.dataset.action === 'topup') {
+      saldo += nominal;
+    } else if (modal.dataset.action === 'withdraw') {
+      if (saldo >= nominal) saldo -= nominal;
+      else return tampilNotifikasi('Saldo tidak cukup.');
+    }
+
+    updateSaldo();
+    closeModal();
+  }
+
+  function tampilNotifikasi(pesan) {
+    notifikasiPesan.textContent = pesan;
+    notifikasiModal.style.display = 'flex';
+  }
+
+  function closeNotifikasi() {
+    notifikasiModal.style.display = 'none';
+  }
+
+  function closeSuksesModal() {
+    suksesModal.style.display = 'none';
+  }
+
+  function beli(nama, harga) {
+    if (saldo < harga) {
+      tampilNotifikasi('Saldo tidak cukup.');
+      return;
+    }
+
+    loadingModal.style.display = 'flex';
+
+    setTimeout(() => {
+      loadingModal.style.display = 'none';
+      saldo -= harga;
+      updateSaldo();
+
+      const investasiBaru = {
+        nama,
+        harga,
+        tanggal: new Date().toISOString(),
+        nilai: harga,
+        persentase: 0
+      };
+
+      investments.push(investasiBaru);
+      localStorage.setItem('investments', JSON.stringify(investments));
+      tampilInvestasi();
+      suksesModal.style.display = 'flex';
+    }, 1500);
+  }
+
+  function tampilInvestasi() {
+    const container = document.querySelector(".dashboard-card:last-of-type");
+    const existing = document.getElementById('active-investments');
+    if (existing) existing.remove();
+
+    const section = document.createElement('div');
+    section.id = 'active-investments';
+    section.innerHTML = `<h2>Investasi Aktif</h2>`;
+
+    investments.forEach(inv => {
+      const box = document.createElement('div');
+      box.className = 'investment-box';
+      box.innerHTML = `
+        <h3>${inv.nama}</h3>
+        <p>Dibeli: Rp ${inv.harga.toLocaleString()}</p>
+        <p>Nilai Saat Ini: Rp ${inv.nilai.toLocaleString()}</p>
+        <p>Keuntungan: ${inv.persentase.toFixed(2)}%</p>
+      `;
+      section.appendChild(box);
+    });
+
+    container.appendChild(section);
+  }
+
+  function updateInvestasi() {
+    let changed = false;
+    investments.forEach(inv => {
+      const grow = inv.nama.includes('Kripto') ? 0.04 : inv.nama.includes('Saham') ? 0.03 : inv.nama.includes('Emas') ? 0.025 : 0.015;
+      const random = (Math.random() * grow).toFixed(4);
+      inv.persentase += parseFloat(random);
+      inv.nilai = Math.round(inv.harga * (1 + inv.persentase / 100));
+      changed = true;
+    });
+
+    if (changed) {
+      localStorage.setItem('investments', JSON.stringify(investments));
+      tampilInvestasi();
+      updateChart();
+    }
+  }
+
+  let chart;
+  function initChart() {
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Total Nilai Investasi',
+          data: [],
+          borderColor: '#00ffcc',
+          borderWidth: 2,
+          tension: 0.2,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: value => `Rp ${value.toLocaleString()}`
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  function toggleMenu() {
+    const nav = document.getElementById("navbar");
+    nav.classList.toggle("show");
+  }
+
+  function updateChart() {
+    const now = new Date();
+    const label = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+    const total = investments.reduce((sum, inv) => sum + inv.nilai, 0);
+    if (chart.data.labels.length > 10) {
+      chart.data.labels.shift();
+      chart.data.datasets[0].data.shift();
+    }
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(total);
+    chart.update();
+  }
+
+  window.onload = () => {
+    updateSaldo();
+    tampilInvestasi();
+    initChart();
+    updateChart();
+    setInterval(updateInvestasi, 5000);
+  };
+</script>
+</body>
+</html>

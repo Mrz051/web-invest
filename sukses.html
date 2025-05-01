@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Withdraw Sukses</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .loading {
+      font-size: 1.2rem;
+      color: #00ffcc;
+      text-align: center;
+    }
+    .success-container {
+      display: none;
+      max-width: 420px;
+      margin: auto;
+      padding: 2rem;
+      background: #1a1a1a;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffcc88;
+      color: white;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .success-container h2 {
+      color: #00ffcc;
+      margin-bottom: 0.5rem;
+    }
+    .success-container .subtitle {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 1.5rem;
+    }
+    .details-box {
+      background: #111;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: inset 0 0 6px #00ffcc33;
+      text-align: left;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .details-box .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      border-bottom: 1px solid #333;
+      padding-bottom: 0.3rem;
+    }
+    .details-box .row:last-child {
+      border-bottom: none;
+    }
+    .success-container button {
+      background: linear-gradient(to right, #00ccff, #00ffcc);
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ffcc88;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="loading" id="loading">Tunggu sebentar...</div>
+
+<div class="success-container" id="successContainer">
+  <h2>Withdraw Berhasil</h2>
+  <p class="subtitle">Detail transaksi Anda:</p>
+  <div class="details-box">
+    <div class="row"><span>Username</span><b id="detailUsername"></b></div>
+    <div class="row"><span>Nama Bank</span><b id="detailBank"></b></div>
+    <div class="row"><span>Nama Rekening</span><b id="detailNama"></b></div>
+    <div class="row"><span>Nomor Rekening</span><b id="detailNorek"></b></div>
+    <div class="row"><span>Jumlah</span><b id="detailJumlah"></b></div>
+    <div class="row"><span>Tanggal</span><b id="detailTanggal"></b></div>
+    <div class="row"><span>Jam</span><b id="detailJam"></b></div>
+    <div class="row"><span>Status</span><b style="color: #00ffcc;">Berhasil</b></div>
+  </div>
+  <button onclick="window.location.href='index.html'">Kembali</button>
+</div>
+
+<script>
+  setTimeout(() => {
+    // Ambil data dari localStorage
+    const username = localStorage.getItem('username') || 'guest';
+    const bank = localStorage.getItem('bank') || '-';
+    const nama = localStorage.getItem('nama') || '-';
+    const norek = localStorage.getItem('norek') || '-';
+    const jumlah = localStorage.getItem('jumlah') || '0';
+
+    const now = new Date();
+    const tanggal = now.toLocaleDateString('id-ID');
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+    // Tampilkan data
+    document.getElementById('detailUsername').textContent = username;
+    document.getElementById('detailBank').textContent = bank;
+    document.getElementById('detailNama').textContent = nama;
+    document.getElementById('detailNorek').textContent = norek;
+    document.getElementById('detailJumlah').textContent = `Rp ${parseInt(jumlah).toLocaleString('id-ID')}`;
+    document.getElementById('detailTanggal').textContent = tanggal;
+    document.getElementById('detailJam').textContent = jam;
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('successContainer').style.display = 'block';
+  }, 2000); // Waktu loading 2 detik
+</script>
+
+</body>
+</html>

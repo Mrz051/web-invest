@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Withdraw - Investasi Cuan</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .hero, .container, .success-container {
+      max-width: 420px;
+      margin: 2rem auto;
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 12px #00ffcc55;
+    }
+    .hero h1 {
+      color: #00ffcc;
+      text-align: center;
+    }
+    .hero p, .success-container p {
+      color: #cccccc;
+      text-align: center;
+    }
+    h2 {
+      color: #00ffcc;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #00ffcc;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(to right, #00ccff, #00ffcc);
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc88;
+    }
+    
+    .btn-back {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.9rem;
+  background: #00ffcc;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 0 10px #00ffcc88;
+}
+
+.btn-back:hover {
+  background: #00ddb0;
+  box-shadow: 0 0 14px #00ffccaa;
+}
+
+     .loading {
+      font-size: 1.3rem;
+      color: #00ffcc;
+      text-align: center;
+    }
+
+    .success-container {
+      display: none;
+      width: 90%;
+      max-width: 700px;
+      padding: 2.5rem;
+      background: #1a1a1a;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffcc77;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .success-container h2 {
+      text-align: center;
+      color: #00ffcc;
+      margin-bottom: 0.2rem;
+    }
+
+    .success-container p {
+      text-align: center;
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      background: #111;
+      margin-bottom: 0.8rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      box-shadow: inset 0 0 6px #00ffcc22;
+    }
+
+    .detail b {
+      color: #ddd;
+    }
+
+    .success-container .status {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .success-container {
+        padding: 1.5rem;
+      }
+      .detail {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      footer {
+      background: #1f1f1f;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      color: white;
+      box-shadow: 0 0 10px #00ffcc44;
+    }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Investasi Cuan</h1>
+  <p>Saldo Anda: <strong id="saldoDisplay">Rp 0</strong></p>
+</div>
+
+<div class="container" id="formContainer">
+  <h2>Ajukan Withdraw</h2>
+  <form id="withdrawForm">
+    <label for="bank">Nama Bank/Ewallet</label>
+    <input type="text" id="bank" required />
+
+    <label for="nama">Nama Pemilik Rekening</label>
+    <input type="text" id="nama" required />
+
+    <label for="norek">Nomor Rekening</label>
+    <input type="text" id="norek" required />
+
+    <label for="jumlah">Jumlah Withdraw</label>
+    <input type="number" id="jumlah" required />
+
+    <button type="submit">Ajukan Withdraw</button>
+  </form>
+</div>
+
+ <div class="success-container" id="successContainer">
+  <h2>Withdraw Berhasil</h2>
+  <p>Penarikan dana telah berhasil dikirim!</p>
+
+  <div class="detail"><b>Nama Bank</b> <span id="detailBank"></span></div>
+  <div class="detail"><b>Nama Rekening:</b> <span id="detailNama"></span></div>
+  <div class="detail"><b>Nomor Rekening:</b> <span id="detailNorek"></span></div>
+  <div class="detail"><b>Jumlah:</b> Rp <span id="detailJumlah"></span></div>
+  <div class="detail"><b>Tanggal:</b> <span id="detailTanggal"></span></div>
+  <div class="detail"><b>Jam:</b> <span id="detailJam"></span></div>
+  <div class="detail"><b>Status:</b> <span style="color: #00ffcc;">Berhasil</span></div>
+
+  <button onclick="window.location.href='index.html'" class="btn-back">Kembali ke Dashboard</button>
+</div>
+
+  <footer>
+    <p>&copy; 2025 InvestCuan. All rights reserved.</p>
+  </footer>
+
+<script>
+  let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 0;
+  document.getElementById('saldoDisplay').textContent = `Rp ${saldo.toLocaleString('id-ID')}`;
+
+  const form = document.getElementById('withdrawForm');
+  const formContainer = document.getElementById('formContainer');
+  const successContainer = document.getElementById('successContainer');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const bank = document.getElementById('bank').value;
+    const nama = document.getElementById('nama').value;
+    const norek = document.getElementById('norek').value;
+    const jumlah = parseInt(document.getElementById('jumlah').value);
+
+    if (jumlah > saldo || jumlah <= 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Jumlah tidak valid atau melebihi saldo.',
+        background: '#1a1a1a',
+        color: '#fff',
+        confirmButtonColor: '#00ffcc'
+      });
+      return;
+    }
+
+    saldo -= jumlah;
+    localStorage.setItem('saldo', saldo);
+    document.getElementById('saldoDisplay').textContent = `Rp ${saldo.toLocaleString('id-ID')}`;
+
+    const now = new Date();
+    const tanggal = now.toLocaleDateString('id-ID');
+    const jam = now.toLocaleTimeString('id-ID');
+
+    // tampilkan detail ke halaman sukses
+    document.getElementById('detailBank').textContent = bank;
+    document.getElementById('detailNama').textContent = nama;
+    document.getElementById('detailNorek').textContent = norek;
+    document.getElementById('detailJumlah').textContent = jumlah.toLocaleString('id-ID');
+    document.getElementById('detailTanggal').textContent = tanggal;
+    document.getElementById('detailJam').textContent = jam;
+
+    formContainer.style.display = 'none';
+    successContainer.style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
